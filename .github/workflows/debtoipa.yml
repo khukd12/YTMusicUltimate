@@ -1,4 +1,4 @@
-name: Convert Deb to IPA
+name: Build IPA
 
 on:
   push:
@@ -13,13 +13,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          python-version: '3.x'
+          node-version: '14'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: npm install
 
-      - name: Convert Deb to IPA
-        run: python convert_deb_to_ipa.py
+      - name: Build IPA
+        run: make clean package SIDELOADING=1
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ytmusic-ipa
+          path: path/to/your/ipa/file.ipa
